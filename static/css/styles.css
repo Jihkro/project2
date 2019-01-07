@@ -1,0 +1,15 @@
+body {
+  color: #BBBBBB;
+  background-color: #333333;
+}
+
+
+.button-container{
+  display:flex;
+  justify-content: flex-end;
+  font-size: 32px;
+}
+
+.amount{
+  color:#339933;
+}
