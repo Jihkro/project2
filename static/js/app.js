@@ -69,10 +69,6 @@ function toggleButton(b) {
 hurricaneButton = appendButton("#HurricaneButton")
 earthquakeButton = appendButton("#EarthquakeButton")
 
-//Testbutton is used for debug purposes
-testbutton = d3.select("#button").append("button").attr("type","button").text("BUTTON").on("click", function() { console.log(`The current state of HurricaneButton is ${hurricaneButton.state} and the current state of EarthquakeButton is ${earthquakeButton.state}`);
-console.log(`The current values on the slider are ${$("#slider-range" ).slider("values",0)} and ${$("#slider-range").slider("values",1)}`)})
-
 //Create Date Slider
 $( "#slider-range" ).slider({
   range: true,
@@ -89,10 +85,15 @@ $( "#slider-range" ).slider({
 });
 $( "#amount" ).val($( "#slider-range" ).slider( "values", 0) + " - " + ($( "#slider-range" ).slider( "values", 1)))
 
+//Random Color Generator For Testing Purposes
+function chooseColor(){
+  return '#'+Math.floor(Math.random()*16777215).toString(16);
+}
+
 //Load Base map
 var myMap = L.map("map-id", {
-  center: [40.7128, -74.0059],
-  zoom: 11
+  center: [40, -96],
+  zoom: 4
 });
 
 // Adding tile layer
@@ -102,3 +103,61 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   id: "mapbox.streets",
   accessToken: API_KEY
 }).addTo(myMap);
+
+var maptype = "county";
+
+$.getJSON("../static/js/countiesgeojson.json", function(json) {
+  console.log(json)
+  countyLayer = new L.geoJSON(json,{
+    style: function(feature){
+      return {
+      color: "#EE3333",
+      weight: 1,
+      fillColor: chooseColor(),
+      fillOpacity: 0.5
+    }}
+  });
+  countyLayer.addTo(myMap);
+});
+
+$.getJSON("../static/js/statesgeojson.json", function(json) {
+  console.log(json)
+  stateLayer = new L.geoJSON(json,{
+    style: function(feature){
+      return {
+      color: "#EE3333",
+      weight: 1,
+      fillColor: chooseColor(),
+      fillOpacity: 0.5
+    }}
+  });
+  //statesLayer.addTo(myMap)
+});
+
+
+//Testbutton is used for debug purposes, checking how switches and sliders are read and testing how to update map.
+testbutton = d3.select("#button").append("button").attr("type","button").text("BUTTON").on("click", function() { console.log(`The current state of HurricaneButton is ${hurricaneButton.state} and the current state of EarthquakeButton is ${earthquakeButton.state}`);
+console.log(`The current values on the slider are ${$("#slider-range" ).slider("values",0)} and ${$("#slider-range").slider("values",1)}`);
+if (maptype == "state"){
+myMap.removeLayer(stateLayer);
+maptype = "county";
+countyLayer.eachLayer(function(i){ i.setStyle({
+color: "#EE3333",
+weight: 1,
+fillColor: chooseColor(),
+fillOpacity: 0.5
+})})
+countyLayer.addTo(myMap)
+}
+else{
+  myMap.removeLayer(countyLayer);
+    maptype = "state";
+  stateLayer.eachLayer(function(i){ i.setStyle({
+  color: "#EE3333",
+  weight: 1,
+  fillColor: chooseColor(),
+  fillOpacity: 0.5
+  })})
+  stateLayer.addTo(myMap);
+}
+});
