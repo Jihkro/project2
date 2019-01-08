@@ -68,6 +68,10 @@ function toggleButton(b) {
 
 hurricaneButton = appendButton("#HurricaneButton")
 earthquakeButton = appendButton("#EarthquakeButton")
+tornadoButton = appendButton("#TornadoButton")
+wildfireButton = appendButton("#WildfireButton")
+floodButton = appendButton("#FloodButton")
+
 
 //Create Date Slider
 $( "#slider-range" ).slider({
@@ -87,8 +91,48 @@ $( "#amount" ).val($( "#slider-range" ).slider( "values", 0) + " - " + ($( "#sli
 
 //Random Color Generator For Testing Purposes
 function chooseColor(){
+  // return "#808080".tostring(16);
   return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
+
+function updatemap(hurricaneState,earthQuakeState,tornadoState,wildfireState, floodState, startDate,endDate, mapType){
+  query= "/"+ mapType +"/";
+  
+  if (hurricaneState == "on"){
+    query = query + "1"
+  }
+  else {
+    query = query + "0"
+  }
+  if (earthQuakeState == "on"){
+    query = query + "1"
+  }
+  else {
+    query = query + "0"
+  }
+  if (tornadoState == "on"){
+    query = query + "1"
+  }
+  else {
+    query = query + "0"
+  }
+  if (wildfireState == "on"){
+    query = query + "1"
+  }
+  else {
+    query = query + "0"
+  }
+  if (floodState == "on"){
+    query = query + "1"
+  }
+  else {
+    query = query + "0"
+  }
+
+  query = query + startDate +endDate
+
+};
+
 
 //Load Base map
 var myMap = L.map("map-id", {
@@ -133,6 +177,7 @@ $.getJSON("../static/js/statesgeojson.json", function(json) {
   });
   //statesLayer.addTo(myMap)
 });
+
 
 
 //Testbutton is used for debug purposes, checking how switches and sliders are read and testing how to update map.
