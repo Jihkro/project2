@@ -56,7 +56,7 @@ def countyRoute(params):
     if params[0:5]=="00000":
         return "No Data"
     multiple = False
-    query = "SELECT *, COUNT(1) FROM DISASTERS WHERE "
+    query = "SELECT *, COUNT(1) FROM DISASTERS WHERE ("
     if params[0]=="1":
         query = query + "`Incident Type` = 'Hurricane' "
         multiple = True
@@ -80,8 +80,8 @@ def countyRoute(params):
             query = query + "OR "
         query = query + "`Incident Type` = 'Flood' "
 
-    query = query + "AND `Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
-    query = query + " GROUP BY `FIPS Code`"
+    query = query + ") AND (`Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
+    query = query + ") GROUP BY `FIPS Code`"
     df = pd.read_sql_query(query, db.session.bind)
     data = dict(zip(df['FIPS Code'].values.tolist(), df['COUNT(1)'].values.tolist()))
     return jsonify(data)
@@ -92,7 +92,7 @@ def stateRoute(params):
     if params[0:5]=="00000":
         return "No Data"
     multiple = False
-    query = "SELECT *, COUNT(1) FROM (SELECT * FROM DISASTERS WHERE "
+    query = "SELECT *, COUNT(1) FROM (SELECT * FROM DISASTERS WHERE ("
     if params[0]=="1":
         query = query + "`Incident Type` = 'Hurricane' "
         multiple = True
@@ -116,8 +116,8 @@ def stateRoute(params):
             query = query + "OR "
         query = query + "`Incident Type` = 'Flood' "
 
-    query = query + "AND `Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
-    query = query + " GROUP BY `Disaster Number`) GROUP BY `State Code`"
+    query = query + ") AND (`Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
+    query = query + ") GROUP BY `Disaster Number`) GROUP BY `State Code`"
     df = pd.read_sql_query(query, db.session.bind)
     data = dict(zip(df['State Code'].values.tolist(), df['COUNT(1)'].values.tolist()))
     return jsonify(data)
