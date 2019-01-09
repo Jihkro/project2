@@ -64,20 +64,23 @@ def countyRoute(params):
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Earthquake' "
+        multiple = True
     if params[2]=="1":
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Tornado' "
+        multiple = True
     if params[3]=="1":
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Wildfire' "
+        multiple = True
     if params[4]=="1":
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Flood' "
 
-    query = query + "AND `Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[10:14]
+    query = query + "AND `Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
     query = query + " GROUP BY `FIPS Code`"
     df = pd.read_sql_query(query, db.session.bind)
     data = dict(zip(df['FIPS Code'].values.tolist(), df['COUNT(1)'].values.tolist()))
@@ -97,20 +100,23 @@ def stateRoute(params):
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Earthquake' "
+        multiple = True
     if params[2]=="1":
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Tornado' "
+        multiple = True
     if params[3]=="1":
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Wildfire' "
+        multiple = True
     if params[4]=="1":
         if multiple== True:
             query = query + "OR "
         query = query + "`Incident Type` = 'Flood' "
 
-    query = query + "AND `Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[10:14]
+    query = query + "AND `Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
     query = query + " GROUP BY `Disaster Number`) GROUP BY `State Code`"
     df = pd.read_sql_query(query, db.session.bind)
     data = dict(zip(df['State Code'].values.tolist(), df['COUNT(1)'].values.tolist()))

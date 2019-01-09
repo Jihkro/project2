@@ -64,6 +64,7 @@ function toggleButton(b) {
     b.offText.transition().duration(1000).attr("dx",7*buttonwidth/4);
     b.state = "on";
   }
+  updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer)
 }
 
 hurricaneButton = appendButton("#HurricaneButton")
@@ -81,10 +82,11 @@ $( "#slider-range" ).slider({
   step: 1,
   values: [1990, 2000],
   slide: function( event, ui ) {
-    $( "#amount" ).val( ui.values[0].toString() + " - " + ui.values[1].toString())
+    $( "#amount" ).val( ui.values[0].toString() + " - " + ui.values[1].toString());
+    updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);
   },
   change: function( event, ui ) {
-    console.log("The slider has been moved to something new");
+    updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);
   }
 });
 $( "#amount" ).val($( "#slider-range" ).slider( "values", 0) + " - " + ($( "#slider-range" ).slider( "values", 1)))
@@ -95,9 +97,56 @@ function chooseColor(){
   return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
 
-function updatemap(hurricaneState,earthQuakeState,tornadoState,wildfireState, floodState, startDate,endDate, mapType){
-  query= "/"+ mapType +"/";
-  
+//Load Base map
+var myMap = L.map("map-id", {
+  center: [40, -96],
+  zoom: 4
+});
+
+// Adding tile layer
+L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.streets",
+  accessToken: API_KEY
+}).addTo(myMap);
+
+var maptype = "county";
+
+
+$.getJSON("../static/js/countiesgeojson.json", function(json) {
+  console.log(json)
+  countyLayer = new L.geoJson(json,{
+    style: function(feature){
+      return {
+      color: "#EE3333",
+      weight: 1,
+      fillColor: chooseColor(),
+      fillOpacity: 0.5
+    }}
+  });
+  countyLayer.addTo(myMap);
+});
+
+
+$.getJSON("../static/js/statesgeojson.json", function(json) {
+  console.log(json)
+  stateLayer = new L.geoJson(json,{
+    style: function(feature){
+      return {
+      color: "#EE3333",
+      weight: 1,
+      fillColor: chooseColor(),
+      fillOpacity: 0.5
+    }}
+  });
+  //stateLayer.addTo(myMap)
+});
+
+
+function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, floodState, startDate,endDate, newMapType, stateLayer, countyLayer){
+  query= "/"+ newMapType +"/";
+
   if (hurricaneState == "on"){
     query = query + "1"
   }
@@ -131,53 +180,61 @@ function updatemap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
 
   query = query + startDate +endDate
 
+  if (newMapType == "county") {
+    d3.json(query).then( function(data) {
+      myMap.removeLayer(stateLayer);
+      myMap.removeLayer(countyLayer);
+      countyLayer.eachLayer(function(i){i.setStyle({
+      color: "#EE3333",
+      weight: 1,
+      fillColor: getColor(data["" + i.feature.properties.STATE + i.feature.properties.COUNTY]),
+      fillOpacity: 0.8
+      })})
+      countyLayer.addTo(myMap)
+    }
+  )}
+  else {
+    d3.json(query).then( function(data) {
+      myMap.removeLayer(stateLayer);
+      myMap.removeLayer(countyLayer);
+      stateLayer.eachLayer(function(i){ i.setStyle({
+      color: "#EE3333",
+      weight: 1,
+      fillColor: getColor(data[parseInt(i.feature.properties.STATE)]),
+      fillOpacity: 0.8
+      })})
+      stateLayer.addTo(myMap)
+    })
+  }
+
 };
 
 
-//Load Base map
-var myMap = L.map("map-id", {
-  center: [40, -96],
-  zoom: 4
-});
-
-// Adding tile layer
-L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-  maxZoom: 18,
-  id: "mapbox.streets",
-  accessToken: API_KEY
-}).addTo(myMap);
-
-var maptype = "county";
-
-$.getJSON("../static/js/countiesgeojson.json", function(json) {
-  console.log(json)
-  countyLayer = new L.geoJSON(json,{
-    style: function(feature){
-      return {
-      color: "#EE3333",
-      weight: 1,
-      fillColor: chooseColor(),
-      fillOpacity: 0.5
-    }}
-  });
-  countyLayer.addTo(myMap);
-});
-
-$.getJSON("../static/js/statesgeojson.json", function(json) {
-  console.log(json)
-  stateLayer = new L.geoJSON(json,{
-    style: function(feature){
-      return {
-      color: "#EE3333",
-      weight: 1,
-      fillColor: chooseColor(),
-      fillOpacity: 0.5
-    }}
-  });
-  //statesLayer.addTo(myMap)
-});
-
+function getColor(total){
+  total = parseInt(total)
+  if (total == 0){
+    result = "#000000"
+  }
+  else if (total <3){
+    result = "#333333"
+  }
+  else if (total < 5){
+    result = "#666666"
+  }
+  else if (total < 7){
+    result = "#999999"
+  }
+  else if (total < 10){
+    result = "#BBBBBB"
+  }
+  else if (total > 9){
+    result = "#FFFFFF"
+  }
+  else {
+    result = "#000000"
+  }
+  return result;
+}
 
 
 //Testbutton is used for debug purposes, checking how switches and sliders are read and testing how to update map.
@@ -206,3 +263,8 @@ else{
   stateLayer.addTo(myMap);
 }
 });
+setTimeout(()=>{
+d3.select("#button").append("button").attr("type","button").text("Button2").on("click", ()=>{console.log("Trying to click button2"); updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer)})
+}, 1500);
+d3.select("#stateView").on("click", ()=>{maptype = "state"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});
+d3.select("#countyView").on("click", ()=>{maptype = "county"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});
