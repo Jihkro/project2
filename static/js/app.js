@@ -182,6 +182,8 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
 
   if (newMapType == "county") {
     d3.json(query).then( function(data) {
+      console.log(data)
+      console.log(data["02170"])
       myMap.removeLayer(stateLayer);
       myMap.removeLayer(countyLayer);
       countyLayer.eachLayer(function(i){i.setStyle({
@@ -189,7 +191,8 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
       weight: 1,
       fillColor: getColor(data["" + i.feature.properties.STATE + i.feature.properties.COUNTY]),
       fillOpacity: 0.8
-      })})
+      })
+      i.bindTooltip("<strong>" + i.feature.properties.NAME + " " + i.feature.properties.LSAD + "</strong>: " + getTooltipMessage(data["" + i.feature.properties.STATE + i.feature.properties.COUNTY]))})
       countyLayer.addTo(myMap)
     }
   )}
@@ -202,15 +205,22 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
       weight: 1,
       fillColor: getColor(data[parseInt(i.feature.properties.STATE)]),
       fillOpacity: 0.8
-      })})
+      })
+      i.bindTooltip("<strong>" + i.feature.properties.NAME + "</strong>: " + getTooltipMessage(data[parseInt(i.feature.properties.STATE)]))})
+
       stateLayer.addTo(myMap)
     })
   }
 
 };
 
-
-function getColor(total){
+function getColor(data){
+  try {
+    total = data.TOTAL;
+  }
+  catch(err) {
+    total = 0;
+  }
   total = parseInt(total)
   if (total == 0){
     result = "#000000"
@@ -234,6 +244,24 @@ function getColor(total){
     result = "#000000"
   }
   return result;
+
+}
+
+function getTooltipMessage(data){
+
+  try {
+    message = "Total: " + data.TOTAL
+    message = message + "\nHurricanes: " + data.HurricaneCount
+    message = message + "<br>Earthquakes: " + data.EarthquakeCount
+    message = message + "\nTornados: " + data.TornadoCount
+    message = message + "\nWildfires: " + data.FireCount
+    message = message + "\nFloods: " + data.FloodCount
+  }
+  catch(err) {
+    message = "No Disasters"
+  }
+
+  return message
 }
 
 

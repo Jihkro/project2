@@ -51,6 +51,7 @@ def debug():
     data = {"FIPS Codes": df['FIPS Code'].values.tolist(), "Begin Dates":df['Incident Begin Date'].values.tolist()}
     return jsonify(data)
 
+"""
 @app.route("/county/<params>")
 def countyRoute(params):
     if params[0:5]=="00000":
@@ -73,7 +74,7 @@ def countyRoute(params):
     if params[3]=="1":
         if multiple== True:
             query = query + "OR "
-        query = query + "`Incident Type` = 'Wildfire' "
+        query = query + "`Incident Type` = 'Fire' "
         multiple = True
     if params[4]=="1":
         if multiple== True:
@@ -85,6 +86,49 @@ def countyRoute(params):
     df = pd.read_sql_query(query, db.session.bind)
     data = dict(zip(df['FIPS Code'].values.tolist(), df['COUNT(1)'].values.tolist()))
     return jsonify(data)
+"""
+
+@app.route("/county/<params>")
+def countyRoute(params):
+   if params[0:5]=="00000":
+       return "No Data"
+   multiple = False
+   query = """SELECT `FIPS Code`, COUNT(1) AS TOTAL,
+         COUNT(case `Incident Type` when 'Flood' then 1 else null end) AS FloodCount,
+        COUNT(case `Incident Type` when 'Hurricane' then 1 else null end) AS HurricaneCount,
+        COUNT(case `Incident Type` when 'Fire' then 1 else null end) AS FireCount,
+        COUNT(case `Incident Type` when 'Tornado' then 1 else null end) AS TornadoCount,
+        COUNT(case `Incident Type` when 'Earthquake' then 1 else null end) AS EarthquakeCount FROM DISASTERS WHERE ("""
+   if params[0]=="1":
+       query = query + "`Incident Type` = 'Hurricane' "
+       multiple = True
+   if params[1]=="1":
+       if multiple== True:
+           query = query + "OR "
+       query = query + "`Incident Type` = 'Earthquake' "
+       multiple = True
+   if params[2]=="1":
+       if multiple== True:
+           query = query + "OR "
+       query = query + "`Incident Type` = 'Tornado' "
+       multiple = True
+   if params[3]=="1":
+       if multiple== True:
+           query = query + "OR "
+       query = query + "`Incident Type` = 'Fire' "
+       multiple = True
+   if params[4]=="1":
+       if multiple== True:
+           query = query + "OR "
+       query = query + "`Incident Type` = 'Flood' "
+
+   query = query + ") AND (`Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
+   query = query + ") GROUP BY `FIPS Code`"
+   df = pd.read_sql_query(query, db.session.bind)
+   col =['FIPS Code','TOTAL','FloodCount','HurricaneCount','FireCount','TornadoCount','EarthquakeCount']
+   count_df = df[col].copy()
+   data = count_df.set_index("FIPS Code").T.to_dict()
+   return jsonify(data)
 
 
 @app.route("/state/<params>")
@@ -92,7 +136,12 @@ def stateRoute(params):
     if params[0:5]=="00000":
         return "No Data"
     multiple = False
-    query = "SELECT *, COUNT(1) FROM (SELECT * FROM DISASTERS WHERE ("
+    query = """SELECT `State Code`, COUNT(1) AS TOTAL,
+          COUNT(case `Incident Type` when 'Flood' then 1 else null end) AS FloodCount,
+         COUNT(case `Incident Type` when 'Hurricane' then 1 else null end) AS HurricaneCount,
+         COUNT(case `Incident Type` when 'Fire' then 1 else null end) AS FireCount,
+         COUNT(case `Incident Type` when 'Tornado' then 1 else null end) AS TornadoCount,
+         COUNT(case `Incident Type` when 'Earthquake' then 1 else null end) AS EarthquakeCount FROM (SELECT * FROM DISASTERS WHERE ("""
     if params[0]=="1":
         query = query + "`Incident Type` = 'Hurricane' "
         multiple = True
@@ -109,7 +158,7 @@ def stateRoute(params):
     if params[3]=="1":
         if multiple== True:
             query = query + "OR "
-        query = query + "`Incident Type` = 'Wildfire' "
+        query = query + "`Incident Type` = 'Fire' "
         multiple = True
     if params[4]=="1":
         if multiple== True:
@@ -119,9 +168,10 @@ def stateRoute(params):
     query = query + ") AND (`Incident Begin Date` >= " + params[5:9] + " AND `Incident Begin Date` <= " + params[9:13]
     query = query + ") GROUP BY `Disaster Number`) GROUP BY `State Code`"
     df = pd.read_sql_query(query, db.session.bind)
-    data = dict(zip(df['State Code'].values.tolist(), df['COUNT(1)'].values.tolist()))
+    col =['State Code','TOTAL','FloodCount','HurricaneCount','FireCount','TornadoCount','EarthquakeCount']
+    count_df = df[col].copy()
+    data = count_df.set_index("State Code").T.to_dict()
     return jsonify(data)
-
 
 
 
