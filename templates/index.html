@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="../static/css/styles.css">
   <link rel="icon" href="../static/favicon.ico">
   <!--<link rel="stylesheet" href="assets/css/d3Style.css">-->
-
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
@@ -86,7 +86,13 @@
   <!-- Remove ../ from ../static/css/style.css when time to deploy flask-->
 
   <script type="text/javascript" src="../static/js/app.js"></script>
-
+  <br/>
+  
+  <div class="container">
+    <div id="plot"></div>
+    <script src="../static/js/year_data.js"></script>
+    <script src="../static/js/usa_plot.js"></script>
+  </div>
 </body>
 
 </html>
