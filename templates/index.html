@@ -25,29 +25,45 @@
   crossorigin=""/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="../static/css/styles.css">
-
+  <link rel="icon" href="../static/favicon.ico">
   <!--<link rel="stylesheet" href="assets/css/d3Style.css">-->
 
 </head>
 
 <body>
-  <nav class="navbar navbar-light bg-light">
-    <form class="form-inline">
-      <div  id="State"><img src="../static/images/states.svg" width="100" height="100"></img></div>
-      <button class="btn btn-outline-success" type="button" id="stateView">State View</button>
-      <button class="btn btn-outline-success" type="button" id="countyView">County View</button>
-    </form>
-  </nav>
+  <br/>
 
   <div class="container">
-    The map will go here
 
-    <div id="map-id" style="height: 610px; width: 100%">
+   <!--<div id="map-id" style="height: 610px; width: 100%">-->
+
     </div>
   </div>
+<!-- New Changes -->
+<div class=div"container">
+   <!--Normally these medium columns go full wide on small screen sizes-->
+   <div class="row">
+     <div class="col-md-9">
+       <div id="map-id" style="height: 550px; width: 100%"></div>
+     </div>
+     <div class="col-md-3">
+<div class="button-container" id="StateButton"><img src="../static/images/states.svg" width="30" height="40"></img> View As</div>
+ <br/>
+    <div class="button-container" id="HurricaneButton"><img src="../static/images/Hurricane.svg" width="30" height="40"></img>View Hurricanes</div>
+    <br/>
+    <div class="button-container" id="EarthquakeButton"><img src="../static/images/Earthquake.svg" width="30" height="40"></img>View Earthquakes</div>
+    <br/>
+    <div class="button-container" id="TornadoButton"><img src="../static/images/Tornado.svg" width="30" height="40"></img>View Tornados</div>
+    <br/>
+    <div class="button-container" id="WildfireButton"><img src="../static/images/Wildfires.svg" width="30" height="40"></img>View Wild Fires</div>
+    <br/>
+    <div class="button-container" id="FloodButton"><img src="../static/images/Floods.svg" width="30" height="40"></img>View Floods</div>
+     </div>
+       </div>
+     </div>
+   </div>
 
   <div class="container">
-    A slider will go here
 
     <p>
       <label for="amount">Date range:</label>
@@ -56,28 +72,12 @@
 
     <div id="slider-range"></div>
   </div>
-
-  <div class="container">
-    Toggle switches:<br/>
-    <div class="button-container" id="HurricaneButton"><img src="../static/images/Hurricane.svg" width="50" height="50"></img>View Hurricanes</div>
-    <br/>
-    <div class="button-container" id="EarthquakeButton"><img src="../static/images/Earthquake.svg" width="50" height="50"></img>View Earthquakes</div>
-    <br/>
-    <div class="button-container" id="TornadoButton"><img src="../static/images/Tornado.svg" width="50" height="50"></img>View Tornados</div>
-    <br/>
-    <div class="button-container" id="WildfireButton"><img src="../static/images/Wildfires.svg" width="50" height="50"></img>View Wild Fires</div>
-    <br/>
-    <div class="button-container" id="FloodButton"><img src="../static/images/Floods.svg" width="50" height="50"></img>View Floods</div>
-  </div>
-
-
-
-  <div class="container">
+  <!--<div class="container">
   A button will go here
     <div id="button">
 
     </div>
-  </div>
+  </div>-->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
 
