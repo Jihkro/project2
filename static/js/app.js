@@ -76,20 +76,20 @@ let buttonState = "state"
 
 //svg canvas for the button
 
-buttoncanvas = d3.select(id).append("svg").attr("width", 2*buttonwidth).attr("height", buttonheight).attr("display","inline");
+buttoncanvas = d3.select(id).append("svg").attr("width", 1.5*buttonwidth).attr("height", buttonheight).attr("display","inline");
 
 
 //This is the rectangle which is visible while off
 
 //Bottom-most layer that becomes visible as other rectangles move off of it
 
-buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("width",2*buttonwidth-6).attr("height",buttonheight-6).attr("style","fill:#3333AA");
+buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("width",1.5*buttonwidth-6).attr("height",buttonheight-6).attr("style","fill:#3333AA");
 
 
 //Text on off-layer
 
 let buttonOffText = buttoncanvas.append("text")
-.attr("dx", 7*2*buttonwidth/4 - 2).attr("dy",buttonheight/2)
+.attr("dx", 7*1.5*buttonwidth/4 - 6).attr("dy",buttonheight/2)
 .attr("text-anchor", "middle")
 
 .attr("dominant-baseline", "middle")
@@ -104,12 +104,12 @@ let buttonOffText = buttoncanvas.append("text")
 
 //Covers up off-layer rectangle and text
 
-let buttonInnerRect = buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("width",2*buttonwidth-6).attr("height",buttonheight-6).attr("style","fill:#AA3333");
+let buttonInnerRect = buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("width",1.5*buttonwidth-6).attr("height",buttonheight-6).attr("style","fill:#AA3333");
 
  //Text on on-layer
 
 let buttonOnText = buttoncanvas.append("text")
-.attr("dx", 2*buttonwidth/4)
+.attr("dx", 1.5*buttonwidth/4)
 .attr("dy",buttonheight/2)
 .attr("text-anchor", "middle")
 
@@ -126,7 +126,7 @@ let buttonOnText = buttoncanvas.append("text")
 
 //Transparent interior so we can still see on and off-layers in center
 
-buttoncanvas.append("rect").attr("x",0).attr("y",0).attr("rx",15).attr("ry",15).attr("width",2*buttonwidth).attr("height",buttonheight)
+buttoncanvas.append("rect").attr("x",0).attr("y",0).attr("rx",15).attr("ry",15).attr("width",1.5*buttonwidth).attr("height",buttonheight)
    .attr("style","fill-opacity:0;stroke:#333333;stroke-width:9")
 
 
@@ -141,7 +141,7 @@ let button = {"innerRect":buttonInnerRect, "onText":buttonOnText, "offText":butt
 
 //Attaches click-event to this topmost layer
 
-buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("rx",20).attr("ry",20).attr("width",2*buttonwidth-6).attr("height",buttonheight-6)
+buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("rx",20).attr("ry",20).attr("width",1.5*buttonwidth-6).attr("height",buttonheight-6)
    .attr("style","fill-opacity:0;stroke:#666666;stroke-width:3").on("click", function() {toggleStateButton(button)})
 
 
@@ -155,11 +155,11 @@ function toggleStateButton(b) {
 
 if (b.state == "state"){
 
-b.onText.transition().duration(1000).attr("dx",-3*2*buttonwidth/4);
+b.onText.transition().duration(1000).attr("dx",-3*1.5*buttonwidth/4);
 
 b.innerRect.transition().duration(1000).attr("width", 0);
 
-b.offText.transition().duration(1000).attr("dx",3*2*buttonwidth/4 - 2);
+b.offText.transition().duration(1000).attr("dx",3*1.5*buttonwidth/4 - 6);
 
 b.state = "county";
 
@@ -167,11 +167,11 @@ maptype = "county"; }
 
 else{
 
-b.onText.transition().duration(1000).attr("dx",2*buttonwidth/4);
+b.onText.transition().duration(1000).attr("dx",1.5*buttonwidth/4);
 
-b.innerRect.transition().duration(1000).attr("width", 2*buttonwidth);
+b.innerRect.transition().duration(1000).attr("width", 1.5*buttonwidth);
 
-b.offText.transition().duration(1000).attr("dx",7*2*buttonwidth/4 - 2);
+b.offText.transition().duration(1000).attr("dx",7*1.5*buttonwidth/4 - 6);
 
 b.state = "state";
 maptype = "state";
