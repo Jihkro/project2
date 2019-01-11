@@ -91,7 +91,7 @@ def countyRoute(params):
 @app.route("/county/<params>")
 def countyRoute(params):
    if params[0:5]=="00000":
-       return "No Data"
+       return jsonify({})
    multiple = False
    query = """SELECT `FIPS Code`, COUNT(1) AS TOTAL,
          COUNT(case `Incident Type` when 'Flood' then 1 else null end) AS FloodCount,
@@ -134,7 +134,7 @@ def countyRoute(params):
 @app.route("/state/<params>")
 def stateRoute(params):
     if params[0:5]=="00000":
-        return "No Data"
+        return jsonify({})
     multiple = False
     query = """SELECT `State Code`, COUNT(1) AS TOTAL,
           COUNT(case `Incident Type` when 'Flood' then 1 else null end) AS FloodCount,
