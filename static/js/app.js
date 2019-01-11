@@ -1,6 +1,6 @@
 
-buttonwidth = 100;
-buttonheight = 40;
+buttonwidth = 80;
+buttonheight = 32;
 
 
 //This function appends a button at the provided div id in the html
@@ -16,11 +16,11 @@ function appendButton(id) {
   buttoncanvas.append("rect").attr("x",3).attr("y",3).attr("width",buttonwidth-6).attr("height",buttonheight-6).attr("style","fill:#999999");
 
   //Text on off-layer
-  let buttonOffText = buttoncanvas.append("text").attr("dx", 7*buttonwidth/4).attr("dy",buttonheight/2).attr("text-anchor", "middle")
+  let buttonOffText = buttoncanvas.append("text").attr("dx", 7*buttonwidth/4 - 2).attr("dy",buttonheight/2).attr("text-anchor", "middle")
             .attr("dominant-baseline", "middle")
-            .attr("textLength", "30px")
+            .attr("textLength", "24px")
             .attr("lengthAdjust", "spacingAndGlyphs").text("OFF")
-            .attr("style","fill:black; font-size:20px; font-family: Trebuchet, Arial, sans-serif;")
+            .attr("style","fill:black; font-size:16px; font-family: Trebuchet, Arial, sans-serif;")
 
   //Rectangle visible while on
   //Covers up off-layer rectangle and text
@@ -29,9 +29,9 @@ function appendButton(id) {
   //Text on on-layer
   let buttonOnText = buttoncanvas.append("text").attr("dx", buttonwidth/4).attr("dy",buttonheight/2).attr("text-anchor", "middle")
             .attr("dominant-baseline", "middle")
-            .attr("textLength", "24px")
+            .attr("textLength", "19px")
             .attr("lengthAdjust", "spacingAndGlyphs").text("ON")
-            .attr("style","fill:white; font-size:20px; font-family: Trebuchet, Arial, sans-serif;")
+            .attr("style","fill:white; font-size:16px; font-family: Trebuchet, Arial, sans-serif;")
 
   //Thick border same color as background to cover up moving pieces
   //Transparent interior so we can still see on and off-layers in center
@@ -55,13 +55,13 @@ function toggleButton(b) {
   if (b.state == "on"){
     b.onText.transition().duration(1000).attr("dx",-3*buttonwidth/4);
     b.innerRect.transition().duration(1000).attr("width", 0);
-    b.offText.transition().duration(1000).attr("dx",3*buttonwidth/4);
+    b.offText.transition().duration(1000).attr("dx",3*buttonwidth/4 - 2);
     b.state = "off";
   }
   else{
     b.onText.transition().duration(1000).attr("dx",buttonwidth/4);
     b.innerRect.transition().duration(1000).attr("width", buttonwidth);
-    b.offText.transition().duration(1000).attr("dx",7*buttonwidth/4);
+    b.offText.transition().duration(1000).attr("dx",7*buttonwidth/4 - 2);
     b.state = "on";
   }
   updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer)
@@ -94,20 +94,20 @@ $( "#amount" ).val($( "#slider-range" ).slider( "values", 0) + " - " + ($( "#sli
 //Random Color Generator For Testing Purposes
 function chooseColor(){
   // return "#808080".tostring(16);
-  return '#'+Math.floor(Math.random()*16777215).toString(16);
+  return '#000000';
 }
 
 //Load Base map
 var myMap = L.map("map-id", {
   center: [40, -96],
-  zoom: 4
+  zoom: 4,
 });
 
 // Adding tile layer
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
-  id: "mapbox.streets",
+  id: "mapbox.dark",
   accessToken: API_KEY
 }).addTo(myMap);
 
@@ -119,7 +119,7 @@ $.getJSON("../static/js/countiesgeojson.json", function(json) {
   countyLayer = new L.geoJson(json,{
     style: function(feature){
       return {
-      color: "#EE3333",
+      color: "#333333",
       weight: 1,
       fillColor: chooseColor(),
       fillOpacity: 0.5
@@ -134,7 +134,7 @@ $.getJSON("../static/js/statesgeojson.json", function(json) {
   stateLayer = new L.geoJson(json,{
     style: function(feature){
       return {
-      color: "#EE3333",
+      color: "#333333",
       weight: 1,
       fillColor: chooseColor(),
       fillOpacity: 0.5
@@ -187,7 +187,7 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
       myMap.removeLayer(stateLayer);
       myMap.removeLayer(countyLayer);
       countyLayer.eachLayer(function(i){i.setStyle({
-      color: "#EE3333",
+      color: "#666666",
       weight: 1,
       fillColor: getColor(data["" + i.feature.properties.STATE + i.feature.properties.COUNTY]),
       fillOpacity: 0.8
@@ -201,7 +201,7 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
       myMap.removeLayer(stateLayer);
       myMap.removeLayer(countyLayer);
       stateLayer.eachLayer(function(i){ i.setStyle({
-      color: "#EE3333",
+      color: "#666666",
       weight: 1,
       fillColor: getColor(data[parseInt(i.feature.properties.STATE)]),
       fillOpacity: 0.8
@@ -214,7 +214,7 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
 
 };
 
-function getColor(data){
+/*function getColor(data){
   try {
     total = data.TOTAL;
   }
@@ -242,6 +242,39 @@ function getColor(data){
   }
   else {
     result = "#000000"
+  }
+  return result;
+
+}*/
+
+function getColor(data){
+  try {
+    total = data.TOTAL;
+  }
+  catch(err) {
+    total = 0;
+  }
+  total = parseInt(total)
+  if (total == 0){
+    result = "#FFFFFF"
+  }
+  else if (total <3){
+    result = "#FFBBBB"
+  }
+  else if (total < 5){
+    result = "#FF9999"
+  }
+  else if (total < 7){
+    result = "#FF6666"
+  }
+  else if (total < 10){
+    result = "#FF3333"
+  }
+  else if (total > 9){
+    result = "#FF0000"
+  }
+  else {
+    result = "#FFFFFF"
   }
   return result;
 
@@ -291,7 +324,7 @@ else{
   stateLayer.addTo(myMap);
 }
 });
-setTimeout(()=>{
+setTimeout(()=>{updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);
 d3.select("#button").append("button").attr("type","button").text("Button2").on("click", ()=>{console.log("Trying to click button2"); updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer)})
 }, 1500);
 d3.select("#stateView").on("click", ()=>{maptype = "state"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});
