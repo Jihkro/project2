@@ -173,7 +173,11 @@ def stateRoute(params):
     data = count_df.set_index("State Code").T.to_dict()
     return jsonify(data)
 
-
+@app.route("/table/<params>")
+def tableRoute(params):
+   result = pd.read_sql(f"SELECT `Incident Begin Date`, Title, `Disaster Number` FROM DISASTERS WHERE (`Incident Type` = 'Fire' OR `Incident Type` = 'Hurricane' OR `Incident Type` = 'Earthquake' OR `Incident Type` = 'Tornado' OR `Incident Type` = 'Flood') AND `State Code` = {params} GROUP BY `Disaster Number` ORDER BY `Incident Begin Date`", db.session.bind)
+   data = result.to_dict()
+   return jsonify(data)
 
 
 if __name__ == "__main__":

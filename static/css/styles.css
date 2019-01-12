@@ -6,6 +6,25 @@ body {
 
 }
 
+.title-text{
+  margin-left:60px;
+  font-style: Trebuchet;
+}
+.chart-container{
+  background-color: #FFFFFF;
+}
+#chart-paragraph{
+  padding-left: 100px;
+}
+
+#chart{
+  padding-right: 100px;
+}
+
+.row{
+  margin-left: 40px;
+  margin-right: 40px;
+}
 
 .button-container{
  align:right;
@@ -21,7 +40,7 @@ margin-right:20px;
 }
 
 .amount{
-  color:#339933;
+  color:#0da17c;
 }
 
 .button-container svg {

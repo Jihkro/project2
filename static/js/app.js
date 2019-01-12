@@ -185,8 +185,44 @@ earthquakeButton = appendButton("#EarthquakeButton")
 tornadoButton = appendButton("#TornadoButton")
 wildfireButton = appendButton("#WildfireButton")
 floodButton = appendButton("#FloodButton")
-
 viewButton = appendStateButton("#StateButton")
+
+tableChoice = 24
+
+function updateTableData(b) {
+ console.log("Trying to update table data")
+ d3.json(`/table/${b}`).then(function(data){
+   console.log("Loaded data for table")
+   console.log(data)
+   tabledata = d3.select("#tabledata")
+   tabledata.select("table").remove()
+   table = tabledata.append("table")
+   tablerow = table.append("tr")
+   tablerow.append("th").text("Disaster Number")
+   tablerow.append("th").text("Begin Date")
+   tablerow.append("th").text("Title")
+
+   try {
+     console.log("Successfully tried")
+     len = Object.keys(data.Title).length
+     for(x = 0; x<len; x++){
+       tablerow = table.append("tr")
+       tablerow.append("td").text(data["Disaster Number"][x])
+       tablerow.append("td").text(data["Incident Begin Date"][x])
+       tablerow.append("td").text(data["Title"][x])
+     }
+   }
+   catch(err) {
+     console.log("Error in try")
+     tabledata.append("tr").append("td").text("No Data")
+   }
+
+
+ })
+
+}
+
+updateTableData(tableChoice)
 
 //Create Date Slider
 $( "#slider-range" ).slider({
@@ -320,7 +356,9 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
       fillColor: getColor(data[parseInt(i.feature.properties.STATE)]),
       fillOpacity: 0.8
       })
-      i.bindTooltip("<strong>" + i.feature.properties.NAME + "</strong>: " + getTooltipMessage(data[parseInt(i.feature.properties.STATE)]))})
+      i.bindTooltip("<strong>" + i.feature.properties.NAME + "</strong>: " + getTooltipMessage(data[parseInt(i.feature.properties.STATE)]))
+      i.on({click: function(){updateTableData(i.feature.properties.STATE)}})
+    })
 
       stateLayer.addTo(myMap)
     })
@@ -440,6 +478,6 @@ else{
 });
 setTimeout(()=>{updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);
 //d3.select("#button").append("button").attr("type","button").text("Button2").on("click", ()=>{console.log("Trying to click button2"); updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer)})
-}, 1500);
+}, 3000);
 //d3.select("#stateView").on("click", ()=>{maptype = "state"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});
 //d3.select("#countyView").on("click", ()=>{maptype = "county"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});
