@@ -36,7 +36,7 @@ function appendButton(id) {
   //Thick border same color as background to cover up moving pieces
   //Transparent interior so we can still see on and off-layers in center
   buttoncanvas.append("rect").attr("x",0).attr("y",0).attr("rx",15).attr("ry",15).attr("width",buttonwidth).attr("height",buttonheight)
-    .attr("style","fill-opacity:0;stroke:#333333;stroke-width:9")
+    .attr("style","fill-opacity:0;stroke:#1F1F1F;stroke-width:9")
 
   //Now that the moving pieces are defined, create button object to use for functions and to return at end
   let button = {"innerRect":buttonInnerRect, "onText":buttonOnText, "offText":buttonOffText, "state":buttonState}
@@ -127,7 +127,7 @@ let buttonOnText = buttoncanvas.append("text")
 //Transparent interior so we can still see on and off-layers in center
 
 buttoncanvas.append("rect").attr("x",0).attr("y",0).attr("rx",15).attr("ry",15).attr("width",1.5*buttonwidth).attr("height",buttonheight)
-   .attr("style","fill-opacity:0;stroke:#333333;stroke-width:9")
+   .attr("style","fill-opacity:0;stroke:#1F1F1F;stroke-width:9")
 
 
 //Now that the moving pieces are defined, create button object to use for functions and to return at end
@@ -190,10 +190,10 @@ viewButton = appendStateButton("#StateButton")
 tableChoice = 24
 
 function updateTableData(b) {
- console.log("Trying to update table data")
+ //console.log("Trying to update table data")
  d3.json(`/table/${b}`).then(function(data){
-   console.log("Loaded data for table")
-   console.log(data)
+   //console.log("Loaded data for table")
+   //console.log(data)
    tabledata = d3.select("#tabledata")
    tabledata.select("table").remove()
    table = tabledata.append("table")
@@ -203,7 +203,7 @@ function updateTableData(b) {
    tablerow.append("th").text("Title")
 
    try {
-     console.log("Successfully tried")
+     //console.log("Successfully tried")
      len = Object.keys(data.Title).length
      for(x = 0; x<len; x++){
        tablerow = table.append("tr")
@@ -213,7 +213,7 @@ function updateTableData(b) {
      }
    }
    catch(err) {
-     console.log("Error in try")
+     //console.log("Error in try")
      tabledata.append("tr").append("td").text("No Data")
    }
 
@@ -265,7 +265,7 @@ var maptype = "state";
 
 
 $.getJSON("../static/js/countiesgeojson.json", function(json) {
-  console.log(json)
+  //console.log(json)
   countyLayer = new L.geoJson(json,{
     style: function(feature){
       return {
@@ -280,7 +280,7 @@ $.getJSON("../static/js/countiesgeojson.json", function(json) {
 
 
 $.getJSON("../static/js/statesgeojson.json", function(json) {
-  console.log(json)
+  //console.log(json)
   stateLayer = new L.geoJson(json,{
     style: function(feature){
       return {
@@ -332,8 +332,8 @@ function updateMap(hurricaneState,earthQuakeState,tornadoState,wildfireState, fl
 
   if (newMapType == "county") {
     d3.json(query).then( function(data) {
-      console.log(data)
-      console.log(data["02170"])
+      //console.log(data)
+      //console.log(data["02170"])
       myMap.removeLayer(stateLayer);
       myMap.removeLayer(countyLayer);
       countyLayer.eachLayer(function(i){i.setStyle({
@@ -451,7 +451,7 @@ function getTooltipMessage(data){
 
 
 //Testbutton is used for debug purposes, checking how switches and sliders are read and testing how to update map.
-testbutton = d3.select("#button").append("button").attr("type","button").text("BUTTON").on("click", function() { console.log(`The current state of HurricaneButton is ${hurricaneButton.state} and the current state of EarthquakeButton is ${earthquakeButton.state}`);
+/*testbutton = d3.select("#button").append("button").attr("type","button").text("BUTTON").on("click", function() { console.log(`The current state of HurricaneButton is ${hurricaneButton.state} and the current state of EarthquakeButton is ${earthquakeButton.state}`);
 console.log(`The current values on the slider are ${$("#slider-range" ).slider("values",0)} and ${$("#slider-range").slider("values",1)}`);
 if (maptype == "state"){
 myMap.removeLayer(stateLayer);
@@ -475,9 +475,9 @@ else{
   })})
   stateLayer.addTo(myMap);
 }
-});
+});*/
 setTimeout(()=>{updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);
 //d3.select("#button").append("button").attr("type","button").text("Button2").on("click", ()=>{console.log("Trying to click button2"); updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer)})
-}, 3000);
+}, 30000);
 //d3.select("#stateView").on("click", ()=>{maptype = "state"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});
 //d3.select("#countyView").on("click", ()=>{maptype = "county"; updateMap(hurricaneButton.state,earthquakeButton.state,tornadoButton.state,wildfireButton.state, floodButton.state, $("#slider-range").slider("values",0),$("#slider-range").slider("values",1), maptype, stateLayer, countyLayer);});

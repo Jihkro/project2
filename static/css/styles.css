@@ -3,12 +3,12 @@ body, html {
 }
 
 h1{
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 60px;
 }
 
 h3{
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 p{
@@ -16,7 +16,7 @@ p{
 }
 /* The hero image */
 .hero-image {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://i.ibb.co/xGbjJCk/Capture.png"); 
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://i.ibb.co/xGbjJCk/Capture.png");
 /*background-image: url("https://natgeo.imgix.net/subjects/headers/ND%20header%20(1).jpg?auto=compress,format&w=1920&h=960&fit=crop");*/
 
 /* Set a specific height */
@@ -38,12 +38,12 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 color: white;
-font-family: Arial, Helvetica, sans-serif; 
+font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   color: #FFFFFF;
-  background-color: rgb(31, 31, 31);
+  background-color: rgb(31,31,31);
   overflow-x: hidden;
   #overflow-y: hidden;
 }
@@ -96,9 +96,9 @@ margin-right:20px;
 table {
   margin-left: 50px;
   margin-top: 50px;
-  background-color: #FFFFFF; 
-  color: #6d7271;  
-  width: 90%; 
+  background-color: #FFFFFF;
+  color: #6d7271;
+  width: 90%;
   border-bottom: 1px solid rgb(49,101, 119);
   }
 
@@ -112,7 +112,7 @@ table {
   tr{
     padding-left:5px;
   }
-  
+
   tr:nth-child(even) {background-color: #d4d4d4;}
 
   .table-container{
