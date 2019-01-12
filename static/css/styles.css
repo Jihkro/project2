@@ -16,7 +16,8 @@ p{
 }
 /* The hero image */
 .hero-image {
-background-image: url("https://natgeo.imgix.net/subjects/headers/ND%20header%20(1).jpg?auto=compress,format&w=1920&h=960&fit=crop");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://i.ibb.co/xGbjJCk/Capture.png"); 
+/*background-image: url("https://natgeo.imgix.net/subjects/headers/ND%20header%20(1).jpg?auto=compress,format&w=1920&h=960&fit=crop");*/
 
 /* Set a specific height */
 height: 70%;
@@ -50,14 +51,17 @@ body {
 
 .chart-container{
   background-color: #FFFFFF;
-  color: rgb(56, 53, 53)
+  color: rgb(56, 53, 53);
+  margin-bottom: 80px;
 }
 #chart-paragraph{
   padding-left: 100px;
+  margin-bottom: 80px;
 }
 
 #chart{
   padding-right: 50px;
+  margin-bottom: 80px;
 }
 
 .row{
@@ -90,10 +94,11 @@ margin-right:20px;
 
 
 table {
+  margin-left: 50px;
   margin-top: 50px;
   background-color: #FFFFFF; 
   color: #6d7271;  
-  width: 100%; 
+  width: 90%; 
   border-bottom: 1px solid rgb(49,101, 119);
   }
 
@@ -110,10 +115,18 @@ table {
   
   tr:nth-child(even) {background-color: #d4d4d4;}
 
-  .container{
+  .table-container{
+    margin-left: 150px;
     padding-right: 50px;
+    margin-right: 100px;
     margin-bottom: 100px;
   }
 
   .footer_container{
+    padding-bottom: 75px;
+    margin-bottom: 75px;
+  }
+
+  .col-md-6{
+    margin-bottom: 75px;
   }
