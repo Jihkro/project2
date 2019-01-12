@@ -31,13 +31,17 @@
 </head>
 
 <body>
-  <h2 class = "title-text">Natural Disasters in the USA: Interactive Dashboard</h2>
+  <div class="hero-image">
+    <div class="hero-text">
+      <h1>Natural Disasters in the USA</h1>
+      <h3>An Interactive Dashboard</h3>
+      <br/>
+      <p>Mother Nature can be merciless. From the churning hurricanes of the Gulf Coast, to the trailer-tossing storms of Tornado Alley, to the ground-pounding quakes of California, the United States is no stranger to deadly natural disasters.This interactive website allows you to explore major disaster events that have occurred in the US over the last few decades. We hope you enojoy it!</p>
+    </div>
+  </div>
   <br/>
-
   <div class="container">
-
    <!--<div id="map-id" style="height: 610px; width: 100%">-->
-
     </div>
   </div>
 <!-- New Changes -->
@@ -45,6 +49,8 @@
    <!--Normally these medium columns go full wide on small screen sizes-->
    <div class="row">
      <div class="col-md-9">
+       <br/>
+       <br/>
        <div id="map-id" style="height: 400px; width: 100%"></div>
      </div>
      <div class="col-md-3">
@@ -67,8 +73,8 @@
   <div class="container">
     <br/>
     <p>
-      <label for="amount">Date range:</label>
-      <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" size="100"/>
+      <label for="amount">Date range: </label>
+      <input type="text" id="amount" style="border: 0; color: #1bafaf; background-color:rgb(31, 31, 31); font-weight: bold;" size="100"/>
     </p>
 
     <div id="slider-range"></div>
@@ -101,20 +107,28 @@
       <br/>
       <br/>
       <br/>
-      <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <h3>Disasters At A Glance</h3>
+      <p>The interactive graph on the right shows major disaster events that have occured in the United States each year. You can click to see how many major hurricanes, tornadoes, earthquakes, floods, and wildfires have occurred. Scroll down for a state-by-state perspective. </p>
     </div>
     <div class="col-md-8" id = "chart">
-      <div id="plot" style="height: 450px; width: 100%">
+      <div id="plot" style="height: 500px; width: 100%">
         <script src="../static/js/year_data.js"></script>
         <script src="../static/js/usa_plot.js"></script>
       </div>
     </div>
   </div>
 </div>
-
-<div class="row">
-  <div id = "tabledata"> <table></table></div>
+<br>
+<br>
+<div class="container">
+  <h3>Disaster Events By State</h3>
+  <div style="overflow-x:auto;">
+    <div class="table">
+      <div id = "tabledata"><table></table></div>
+    </div>
+  </div>
 </div>
+
 
 <div class="footer-container">
   <div class="row">
